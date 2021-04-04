@@ -17,6 +17,7 @@
                     ItemSizingStrategy="MeasureAllItems"
                     ItemsLayout="VerticalList"
                     ItemsSource="{Binding Inventory}"
+                    SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
                     SelectionMode="Single">
         <CollectionView.EmptyView>
             <StackLayout Padding="25">
