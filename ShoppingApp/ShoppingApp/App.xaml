@@ -9,9 +9,9 @@
         <ResourceDictionary>
             <Color x:Key="Primary">#67734f</Color>
             <Color x:Key="Black">#12130F</Color>
-            <Color x:Key="Creme">#EAE6E5</Color>
+            <Color x:Key="FrameColor">#c39c6b</Color>
             <Color x:Key="Orange">#F4743B</Color>
-            <Color x:Key="Rust">#A44A3F</Color>
+            <Color x:Key="DeleteColor">#b34336</Color>
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="VisualStateManager.VisualStateGroups">
