@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="ShoppingApp.Views.ShoppingCartPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:helpers="clr-namespace:ShoppingApp.Helpers"
+             xmlns:local="clr-namespace:ShoppingApp.ViewModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <ContentPage.BindingContext>
+        <local:ShoppingCartViewModel />
+    </ContentPage.BindingContext>
+
+    <CollectionView BackgroundColor="Transparent"
+                    ItemSizingStrategy="MeasureAllItems"
+                    ItemsLayout="VerticalList"
+                    ItemsSource="{Binding Cart}"
+                    SelectionMode="Single">
+        <CollectionView.EmptyView>
+            <StackLayout Padding="25">
+                <Label FontSize="Large"
+                       HorizontalOptions="CenterAndExpand"
+                       Text="Welcome to the Happy MiniMarket" />
+                <Label Padding="50" Text="" />
+                <Label Padding="10"
+                       FontFamily="FASolid"
+                       FontSize="50"
+                       HorizontalOptions="CenterAndExpand"
+                       Text="{x:Static helpers:FAIcons.FrownOpen}"
+                       VerticalOptions="Center" />
+                <Label Padding="20"
+                       FontSize="Medium"
+                       HorizontalOptions="CenterAndExpand"
+                       Text="Cart currently empty!" />
+                <Button Command="{Binding InventoryCommand}" Text="Search Inventory" />
+            </StackLayout>
+        </CollectionView.EmptyView>
+    </CollectionView>
+</ContentPage>

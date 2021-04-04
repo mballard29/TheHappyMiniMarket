@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="ShoppingApp.Views.InventoryPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:helpers="clr-namespace:ShoppingApp.Helpers"
+             xmlns:local="clr-namespace:ShoppingApp.ViewModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <ContentPage.BindingContext>
+        <local:InventoryViewModel />
+    </ContentPage.BindingContext>
+
+    <CollectionView BackgroundColor="Transparent"
+                    ItemSizingStrategy="MeasureAllItems"
+                    ItemsLayout="VerticalList"
+                    ItemsSource="{Binding Inventory}"
+                    SelectionMode="Single">
+        <CollectionView.EmptyView>
+            <StackLayout Padding="25">
+                <Label Padding="68" Text="" />
+                <Label Padding="10"
+                       FontFamily="FASolid"
+                       FontSize="50"
+                       HorizontalOptions="CenterAndExpand"
+                       Text="{x:Static helpers:FAIcons.ExclamationTriangle}"
+                       VerticalOptions="Center" />
+                <Label Padding="20"
+                       FontSize="Medium"
+                       HorizontalOptions="CenterAndExpand"
+                       Text="We are currently restocking!" />
+                <Button Command="{Binding ShoppingCartCommand}" Text="Search Inventory" />
+            </StackLayout>
+        </CollectionView.EmptyView>
+    </CollectionView>
+</ContentPage>
