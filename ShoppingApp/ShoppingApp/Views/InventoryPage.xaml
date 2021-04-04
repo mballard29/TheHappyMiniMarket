@@ -5,6 +5,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:helpers="clr-namespace:ShoppingApp.Helpers"
              xmlns:local="clr-namespace:ShoppingApp.ViewModels"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d">
 
@@ -33,5 +34,59 @@
                 <Button Command="{Binding ShoppingCartCommand}" Text="Search Inventory" />
             </StackLayout>
         </CollectionView.EmptyView>
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                    <SwipeView.LeftItems>
+                        <SwipeItems>
+                            <SwipeItem BackgroundColor="LightGoldenrodYellow"
+                                       Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=AddCommand, Mode=TwoWay}"
+                                       CommandParameter="{Binding .}"
+                                       Text="Add" />
+                        </SwipeItems>
+                    </SwipeView.LeftItems>
+                    <Grid Padding="5">
+                        <Frame BorderColor="{StaticResource FrameColor}"
+                               CornerRadius="8"
+                               HasShadow="True">
+                            <Grid ColumnDefinitions="*,*,*">
+                                <Label FontSize="Medium"
+                                       Text="{Binding Name}"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Column="1"
+                                       FontSize="Small"
+                                       Text="{Binding UnitsInStock}"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Column="2"
+                                       FontSize="Small"
+                                       Text="{Binding UnitPrice}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </SwipeView>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+        <CollectionView.Header>
+            <StackLayout HorizontalOptions="CenterAndExpand">
+                <Button Padding="22"
+                        Command="{Binding ShoppingCartCommand}"
+                        FontSize="22"
+                        Text="Our Inventory"
+                        VerticalOptions="Center" />
+            </StackLayout>
+        </CollectionView.Header>
+        <CollectionView.Footer>
+            <Grid Padding="10">
+                <Label Text="{Binding Subtotal}" />
+                <Button Grid.Row="1"
+                        Command="{Binding PreviousCommand}"
+                        Text="Previous" />
+                <Button Grid.Row="1"
+                        Grid.Column="1"
+                        Command="{Binding NextCommand}"
+                        Text="Next" />
+            </Grid>
+        </CollectionView.Footer>
     </CollectionView>
 </ContentPage>
