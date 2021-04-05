@@ -69,12 +69,12 @@ namespace ShoppingApp.Models
 
         public string InventoryPrice
         {
-            get => $"${UnitPrice} ea.";
+            get => $"${string.Format("{0:0.00}", UnitPrice)} ea.";
         }
 
         public string ShoppingCartPrice
         {
-            get => $"${Price}";
+            get => $"${string.Format("{0:0.00}", UnitPrice)}";
         }
     }
 }
