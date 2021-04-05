@@ -53,7 +53,7 @@ namespace ShoppingApp.Models
             Id = product.Id;
             Name = product.Name;
             Description = product.Description;
-            Units = 0;
+            Units = product.Units;
             UnitPrice = product.UnitPrice;
         }
 

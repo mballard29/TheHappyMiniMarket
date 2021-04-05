@@ -16,7 +16,7 @@
     <CollectionView BackgroundColor="Transparent"
                     ItemSizingStrategy="MeasureAllItems"
                     ItemsLayout="VerticalList"
-                    ItemsSource="{Binding Cart}"
+                    ItemsSource="{Binding CartPage}"
                     SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
                     SelectionMode="Single">
         <CollectionView.EmptyView>
