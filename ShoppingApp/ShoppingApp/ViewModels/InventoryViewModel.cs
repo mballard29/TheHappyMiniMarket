@@ -3,6 +3,7 @@ using MvvmHelpers.Commands;
 using ShoppingApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -16,6 +17,7 @@ namespace ShoppingApp.ViewModels
         
         public AsyncCommand ShoppingCartCommand { get; }
         public AsyncCommand RefreshCommand { get; }
+        public AsyncCommand<Product> AddCommand { get; }
         public Command PreviousCommand { get; }
         public Command NextCommand { get; }
 
@@ -29,11 +31,12 @@ namespace ShoppingApp.ViewModels
             for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
             {
                 if (i < Inventory.Count)
-                    InventoryPage.Add(Inventory[i]);
+                    InventoryPage.Add(new Product(Inventory[i]));
             }
 
             ShoppingCartCommand = new AsyncCommand(GoToShoppingCart);
             RefreshCommand = new AsyncCommand(Refresh);
+            AddCommand = new AsyncCommand<Product>(Add);
             PreviousCommand = new Command(Previous);
             NextCommand = new Command(Next);
         }
@@ -53,13 +56,46 @@ namespace ShoppingApp.ViewModels
             IsBusy = false;
         }
 
+        async Task Add(Product product)
+        {
+            if (product == null)
+                return;
+            var reqVal = await Application.Current.MainPage.DisplayPromptAsync(product.Name, "How many would you like?", "SAVE", "CANCEL", keyboard: Keyboard.Numeric);
+            if (int.TryParse(reqVal, out int val))
+            {
+                if (val > product.Units || val < 0)
+                    return;
+                if (Cart.Any(i => i.Id.Equals(product.Id)))
+                {
+                    Cart.FirstOrDefault(i => i.Id.Equals(product.Id)).Units += val;
+                    product.Units -= val;
+                    if (product.Units == 0)
+                        Inventory.Remove(product);
+                    await Application.Current.MainPage.DisplayAlert("Added More to Cart", product.Name, "OK");
+                    OnPropertyChanged("Cart");
+                    OnPropertyChanged("Inventory");
+                }
+                else
+                {
+                    Cart.Add(new Product(product));
+                    Cart[Cart.Count - 1].Units = val;
+                    product.Units = product.Units - val;
+                    if (product.Units == 0)
+                        Inventory.Remove(product);
+                    await Application.Current.MainPage.DisplayAlert("Added to Cart", product.Name, "OK");
+                    OnPropertyChanged("Cart");
+                    OnPropertyChanged("Inventory");
+                }
+            }
+        }
+
         private void ReloadPage()
         {
             InventoryPage.Clear();
             for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
             {
                 if (i < Inventory.Count)
-                    InventoryPage.Add(Inventory[i]);
+                    InventoryPage.Add(new Product(Inventory[i]));
             }
         }
 

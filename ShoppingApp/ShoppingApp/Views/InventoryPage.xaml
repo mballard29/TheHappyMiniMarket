@@ -44,7 +44,7 @@
                         <SwipeView.LeftItems>
                             <SwipeItems>
                                 <SwipeItem BackgroundColor="LightGoldenrodYellow"
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=AddCommand, Mode=TwoWay}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:InventoryViewModel}}, Path=AddCommand, Mode=TwoWay}"
                                            CommandParameter="{Binding .}"
                                            Text="Add" />
                             </SwipeItems>

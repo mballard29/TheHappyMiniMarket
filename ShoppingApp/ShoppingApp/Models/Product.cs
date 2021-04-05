@@ -19,8 +19,10 @@ namespace ShoppingApp.Models
                 if (value >= 0)
                 {
                     units = value;
-                    OnPropertyChanged();
+                    SetProperty(ref units, value);
                     OnPropertyChanged("Price");
+                    OnPropertyChanged("ShoppingCartUnits");
+                    OnPropertyChanged("InventoryUnits");
                 }
             }
         }
@@ -30,11 +32,13 @@ namespace ShoppingApp.Models
             get => unitPrice;
             set
             {
-                if (value >= 0)
+                if (value >= 0m)
                 {
-                    unitPrice = value;
+                    SetProperty(ref unitPrice, value);
                     OnPropertyChanged();
                     OnPropertyChanged("Price");
+                    OnPropertyChanged("ShoppingCartPrice");
+                    OnPropertyChanged("InventoryPrice");
                 }
             }
         }
@@ -50,7 +54,7 @@ namespace ShoppingApp.Models
 
         public Product(Product product)
         {
-            Id = product.Id;
+            Id = new Guid($"{product.Id}");
             Name = product.Name;
             Description = product.Description;
             Units = product.Units;

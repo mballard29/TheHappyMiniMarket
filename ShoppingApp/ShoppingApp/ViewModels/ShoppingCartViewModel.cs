@@ -31,7 +31,7 @@ namespace ShoppingApp.ViewModels
             for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
             {
                 if (i < Cart.Count)
-                    CartPage.Add(Cart[i]);
+                    CartPage.Add(new Product(Cart[i]));
             }
 
             InventoryCommand = new AsyncCommand(GoToInventory);
@@ -78,7 +78,7 @@ namespace ShoppingApp.ViewModels
             for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
             {
                 if (i < Cart.Count)
-                    CartPage.Add(Cart[i]);
+                    CartPage.Add(new Product(Cart[i]));
             }
         }
 
