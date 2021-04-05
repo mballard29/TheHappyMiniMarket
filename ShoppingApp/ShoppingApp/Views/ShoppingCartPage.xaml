@@ -51,7 +51,7 @@
                             <SwipeItem BackgroundColor="{StaticResource DeleteColor}"
                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=DeleteCommand, Mode=TwoWay}"
                                        CommandParameter="{Binding .}"
-                                       Text="Edit" />
+                                       Text="Delete" />
                         </SwipeItems>
                     </SwipeView.RightItems>
                     <Grid Padding="5">

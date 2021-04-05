@@ -52,5 +52,19 @@ namespace ShoppingApp.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public string Subtotal
+        {
+            get
+            {
+                decimal subtotal = 0m;
+                foreach (Product x in Cart)
+                {
+                    subtotal += x.Price;
+                }
+                string sub = $"Cart Subtotal: ${subtotal}";
+                return sub;
+            }
+        }
     }
 }
