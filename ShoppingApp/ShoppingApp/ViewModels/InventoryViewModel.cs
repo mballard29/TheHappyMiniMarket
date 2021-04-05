@@ -15,6 +15,7 @@ namespace ShoppingApp.ViewModels
         public ObservableRangeCollection<Product> InventoryPage { get; set; }
         
         public AsyncCommand ShoppingCartCommand { get; }
+        public AsyncCommand RefreshCommand { get; }
         public Command PreviousCommand { get; }
         public Command NextCommand { get; }
 
@@ -32,6 +33,7 @@ namespace ShoppingApp.ViewModels
             }
 
             ShoppingCartCommand = new AsyncCommand(GoToShoppingCart);
+            RefreshCommand = new AsyncCommand(Refresh);
             PreviousCommand = new Command(Previous);
             NextCommand = new Command(Next);
         }
@@ -41,12 +43,18 @@ namespace ShoppingApp.ViewModels
             await Shell.Current.GoToAsync("//ShoppingCartPage");
         }
 
-        private void Previous()
+        async Task Refresh()
         {
-            if (Page == 0)
-                return;
+            IsBusy = true;
+            await Task.Delay(2000);
 
-            Page--;
+            ReloadPage();
+
+            IsBusy = false;
+        }
+
+        private void ReloadPage()
+        {
             InventoryPage.Clear();
             for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
             {
@@ -55,18 +63,22 @@ namespace ShoppingApp.ViewModels
             }
         }
 
+        private void Previous()
+        {
+            if (Page == 0)
+                return;
+
+            Page--;
+            ReloadPage();
+        }
+
         private void Next()
         {
             if (Page == ((int)Math.Ceiling(Inventory.Count / 5m) - 1))
                 return;
 
             Page++;
-            InventoryPage.Clear();
-            for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
-            {
-                if (i < Inventory.Count)
-                    InventoryPage.Add(Inventory[i]);
-            }
+            ReloadPage();
         }
     }
 }

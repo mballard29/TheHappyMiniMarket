@@ -13,93 +13,97 @@
         <local:ShoppingCartViewModel />
     </ContentPage.BindingContext>
 
-    <CollectionView BackgroundColor="Transparent"
-                    ItemSizingStrategy="MeasureAllItems"
-                    ItemsLayout="VerticalList"
-                    ItemsSource="{Binding CartPage}"
-                    SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                    SelectionMode="Single">
-        <CollectionView.EmptyView>
-            <StackLayout Padding="25">
-                <Label Padding="50" Text="" />
-                <Label Padding="10"
-                       FontFamily="FASolid"
-                       FontSize="50"
-                       HorizontalOptions="CenterAndExpand"
-                       Text="{x:Static helpers:FAIcons.FrownOpen}"
-                       VerticalOptions="Center" />
-                <Label Padding="20"
-                       FontSize="Medium"
-                       HorizontalOptions="CenterAndExpand"
-                       Text="Cart currently empty!" />
-                <Button Command="{Binding InventoryCommand}" Text="Search Inventory" />
-            </StackLayout>
-        </CollectionView.EmptyView>
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
-                    <SwipeView.LeftItems>
-                        <SwipeItems>
-                            <SwipeItem BackgroundColor="LightGoldenrodYellow"
-                                       Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=EditCommand, Mode=TwoWay}"
-                                       CommandParameter="{Binding .}"
-                                       Text="Edit" />
-                        </SwipeItems>
-                    </SwipeView.LeftItems>
-                    <SwipeView.RightItems>
-                        <SwipeItems>
-                            <SwipeItem BackgroundColor="{StaticResource DeleteColor}"
-                                       Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=DeleteCommand, Mode=TwoWay}"
-                                       CommandParameter="{Binding .}"
-                                       Text="Delete" />
-                        </SwipeItems>
-                    </SwipeView.RightItems>
-                    <Grid Padding="5">
-                        <Frame BorderColor="{StaticResource FrameColor}"
-                               CornerRadius="8"
-                               HasShadow="True">
-                            <Grid ColumnDefinitions="*,*,*">
-                                <Label FontSize="Medium"
-                                       Text="{Binding Name}"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="1"
-                                       FontSize="Small"
-                                       Text="{Binding ShoppingCartUnits}"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="2"
-                                       FontSize="Small"
-                                       Text="{Binding ShoppingCartPrice}"
-                                       VerticalOptions="Center" />
-                            </Grid>
-                        </Frame>
-                    </Grid>
-                </SwipeView>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-        <CollectionView.Header>
-            <StackLayout HorizontalOptions="CenterAndExpand">
-                <Button Padding="8"
-                        Command="{Binding ClearCommand}"
-                        FontSize="22"
-                        Text="Welcome to the Happy MiniMarket"
-                        VerticalOptions="Center" />
-            </StackLayout>
-        </CollectionView.Header>
-        <CollectionView.Footer>
-            <Grid Padding="10">
-                <Label Grid.Column="1" Text="{Binding Subtotal}" />
-                <Button Grid.Row="1"
-                        Command="{Binding PreviousCommand}"
-                        Text="Previous" />
-                <Button Grid.Row="1"
-                        Grid.Column="1"
-                        Command="{Binding NextCommand}"
-                        Text="Next" />
-                <Button Grid.Row="2"
-                        Grid.ColumnSpan="2"
-                        Command="{Binding CheckoutCommand}"
-                        Text="Checkout" />
-            </Grid>
-        </CollectionView.Footer>
-    </CollectionView>
+    <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                 RefreshColor="Gray"
+                 Command="{Binding RefreshCommand}">
+        <CollectionView BackgroundColor="Transparent"
+                        ItemSizingStrategy="MeasureAllItems"
+                        ItemsLayout="VerticalList"
+                        ItemsSource="{Binding CartPage}"
+                        SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                        SelectionMode="Single">
+            <CollectionView.EmptyView>
+                <StackLayout Padding="25">
+                    <Label Padding="50" Text="" />
+                    <Label Padding="10"
+                           FontFamily="FASolid"
+                           FontSize="50"
+                           HorizontalOptions="CenterAndExpand"
+                           Text="{x:Static helpers:FAIcons.FrownOpen}"
+                           VerticalOptions="Center" />
+                    <Label Padding="20"
+                           FontSize="Medium"
+                           HorizontalOptions="CenterAndExpand"
+                           Text="Cart currently empty!" />
+                    <Button Command="{Binding InventoryCommand}" Text="Search Inventory" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem BackgroundColor="LightGoldenrodYellow"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=EditCommand, Mode=TwoWay}"
+                                           CommandParameter="{Binding .}"
+                                           Text="Edit" />
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem BackgroundColor="{StaticResource DeleteColor}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=DeleteCommand, Mode=TwoWay}"
+                                           CommandParameter="{Binding .}"
+                                           Text="Delete" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Grid Padding="5">
+                            <Frame BorderColor="{StaticResource FrameColor}"
+                                   CornerRadius="8"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="*,*,*">
+                                    <Label FontSize="Medium"
+                                           Text="{Binding Name}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           FontSize="Small"
+                                           Text="{Binding ShoppingCartUnits}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="2"
+                                           FontSize="Small"
+                                           Text="{Binding ShoppingCartPrice}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.Header>
+                <StackLayout HorizontalOptions="CenterAndExpand">
+                    <Button Padding="8"
+                            Command="{Binding ClearCommand}"
+                            FontSize="22"
+                            Text="Welcome to the Happy MiniMarket"
+                            VerticalOptions="Center" />
+                </StackLayout>
+            </CollectionView.Header>
+            <CollectionView.Footer>
+                <Grid Padding="10">
+                    <Label Grid.Column="1" Text="{Binding Subtotal}" />
+                    <Button Grid.Row="1"
+                            Command="{Binding PreviousCommand}"
+                            Text="Previous" />
+                    <Button Grid.Row="1"
+                            Grid.Column="1"
+                            Command="{Binding NextCommand}"
+                            Text="Next" />
+                    <Button Grid.Row="2"
+                            Grid.ColumnSpan="2"
+                            Command="{Binding CheckoutCommand}"
+                            Text="Checkout" />
+                </Grid>
+            </CollectionView.Footer>
+        </CollectionView>
+    </RefreshView>
 </ContentPage>

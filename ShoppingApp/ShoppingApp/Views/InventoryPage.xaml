@@ -13,81 +13,85 @@
         <local:InventoryViewModel />
     </ContentPage.BindingContext>
 
-    <CollectionView BackgroundColor="Transparent"
-                    ItemSizingStrategy="MeasureAllItems"
-                    ItemsLayout="VerticalList"
-                    ItemsSource="{Binding InventoryPage}"
-                    SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                    SelectionMode="Single">
-        <CollectionView.EmptyView>
-            <StackLayout Padding="25">
-                <Label Padding="68" Text="" />
-                <Label Padding="10"
-                       FontFamily="FASolid"
-                       FontSize="50"
-                       HorizontalOptions="CenterAndExpand"
-                       Text="{x:Static helpers:FAIcons.ExclamationTriangle}"
-                       VerticalOptions="Center" />
-                <Label Padding="20"
-                       FontSize="Medium"
-                       HorizontalOptions="CenterAndExpand"
-                       Text="We are currently restocking!" />
-                <Button Command="{Binding ShoppingCartCommand}" Text="Search Inventory" />
-            </StackLayout>
-        </CollectionView.EmptyView>
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
-                    <SwipeView.LeftItems>
-                        <SwipeItems>
-                            <SwipeItem BackgroundColor="LightGoldenrodYellow"
-                                       Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=AddCommand, Mode=TwoWay}"
-                                       CommandParameter="{Binding .}"
-                                       Text="Add" />
-                        </SwipeItems>
-                    </SwipeView.LeftItems>
-                    <Grid Padding="5">
-                        <Frame BorderColor="{StaticResource FrameColor}"
-                               CornerRadius="8"
-                               HasShadow="True">
-                            <Grid ColumnDefinitions="*,*,*">
-                                <Label FontSize="Medium"
-                                       Text="{Binding Name}"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="1"
-                                       FontSize="Small"
-                                       Text="{Binding InventoryUnits}"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="2"
-                                       FontSize="Small"
-                                       Text="{Binding InventoryPrice}"
-                                       VerticalOptions="Center" />
-                            </Grid>
-                        </Frame>
-                    </Grid>
-                </SwipeView>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-        <CollectionView.Header>
-            <StackLayout HorizontalOptions="CenterAndExpand">
-                <Button Padding="22"
-                        Command="{Binding ShoppingCartCommand}"
-                        FontSize="22"
-                        Text="Our Inventory"
-                        VerticalOptions="Center" />
-            </StackLayout>
-        </CollectionView.Header>
-        <CollectionView.Footer>
-            <Grid Padding="10">
-                <Label Text="{Binding Subtotal}" />
-                <Button Grid.Row="1"
-                        Command="{Binding PreviousCommand}"
-                        Text="Previous" />
-                <Button Grid.Row="1"
-                        Grid.Column="1"
-                        Command="{Binding NextCommand}"
-                        Text="Next" />
-            </Grid>
-        </CollectionView.Footer>
-    </CollectionView>
+    <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                 RefreshColor="Gray"
+                 Command="{Binding RefreshCommand}">
+        <CollectionView BackgroundColor="Transparent"
+                        ItemSizingStrategy="MeasureAllItems"
+                        ItemsLayout="VerticalList"
+                        ItemsSource="{Binding InventoryPage}"
+                        SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                        SelectionMode="Single">
+            <CollectionView.EmptyView>
+                <StackLayout Padding="25">
+                    <Label Padding="68" Text="" />
+                    <Label Padding="10"
+                           FontFamily="FASolid"
+                           FontSize="50"
+                           HorizontalOptions="CenterAndExpand"
+                           Text="{x:Static helpers:FAIcons.ExclamationTriangle}"
+                           VerticalOptions="Center" />
+                    <Label Padding="20"
+                           FontSize="Medium"
+                           HorizontalOptions="CenterAndExpand"
+                           Text="We are currently restocking!" />
+                    <Button Command="{Binding ShoppingCartCommand}" Text="Search Inventory" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem BackgroundColor="LightGoldenrodYellow"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=AddCommand, Mode=TwoWay}"
+                                           CommandParameter="{Binding .}"
+                                           Text="Add" />
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <Grid Padding="5">
+                            <Frame BorderColor="{StaticResource FrameColor}"
+                                   CornerRadius="8"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="*,*,*">
+                                    <Label FontSize="Medium"
+                                           Text="{Binding Name}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           FontSize="Small"
+                                           Text="{Binding InventoryUnits}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="2"
+                                           FontSize="Small"
+                                           Text="{Binding InventoryPrice}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.Header>
+                <StackLayout HorizontalOptions="CenterAndExpand">
+                    <Button Padding="22"
+                            Command="{Binding ShoppingCartCommand}"
+                            FontSize="22"
+                            Text="Our Inventory"
+                            VerticalOptions="Center" />
+                </StackLayout>
+            </CollectionView.Header>
+            <CollectionView.Footer>
+                <Grid Padding="10">
+                    <Label Text="{Binding Subtotal}" />
+                    <Button Grid.Row="1"
+                            Command="{Binding PreviousCommand}"
+                            Text="Previous" />
+                    <Button Grid.Row="1"
+                            Grid.Column="1"
+                            Command="{Binding NextCommand}"
+                            Text="Next" />
+                </Grid>
+            </CollectionView.Footer>
+        </CollectionView>
+    </RefreshView>
 </ContentPage>
