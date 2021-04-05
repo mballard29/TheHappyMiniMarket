@@ -3,6 +3,7 @@ using MvvmHelpers.Commands;
 using ShoppingApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -16,6 +17,7 @@ namespace ShoppingApp.ViewModels
 
         public AsyncCommand InventoryCommand { get; set; }
         public AsyncCommand RefreshCommand { get; }
+        public AsyncCommand<Product> DeleteCommand { get; }
         public Command PreviousCommand { get; }
         public Command NextCommand { get; }
 
@@ -34,6 +36,7 @@ namespace ShoppingApp.ViewModels
 
             InventoryCommand = new AsyncCommand(GoToInventory);
             RefreshCommand = new AsyncCommand(Refresh);
+            DeleteCommand = new AsyncCommand<Product>(Delete);
             PreviousCommand = new Command(Previous);
             NextCommand = new Command(Next);
         }        
@@ -51,6 +54,22 @@ namespace ShoppingApp.ViewModels
             ReloadPage();
 
             IsBusy = false;
+        }
+
+        async Task Delete(Product product)
+        {
+            if (product == null) 
+                return;
+            try
+            {
+                Cart.Remove(Cart.Single(x => x.Id == product.Id));
+                await Application.Current.MainPage.DisplayAlert("Deleted", product.Name, "OK");
+            }
+            catch (System.InvalidOperationException)
+            {
+                Console.WriteLine($"Cart does not contain instance of {product.Name}");
+            }
+            ReloadPage();
         }
 
         private void ReloadPage()
