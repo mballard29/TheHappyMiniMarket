@@ -12,6 +12,9 @@ namespace ShoppingApp.ViewModels
     public class ShoppingCartViewModel : ViewModelBase
     {        
         public AsyncCommand InventoryCommand { get; set; }
+        
+        public string ItemPrice;
+        public string Subtotal;
 
         public ShoppingCartViewModel()
         {

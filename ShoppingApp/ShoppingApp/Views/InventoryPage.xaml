@@ -56,11 +56,11 @@
                                        VerticalOptions="Center" />
                                 <Label Grid.Column="1"
                                        FontSize="Small"
-                                       Text="{Binding UnitsInStock}"
+                                       Text="{Binding InventoryUnits}"
                                        VerticalOptions="Center" />
                                 <Label Grid.Column="2"
                                        FontSize="Small"
-                                       Text="{Binding UnitPrice}"
+                                       Text="{Binding InventoryPrice}"
                                        VerticalOptions="Center" />
                             </Grid>
                         </Frame>

@@ -56,5 +56,25 @@ namespace ShoppingApp.Models
             Units = 0;
             UnitPrice = product.UnitPrice;
         }
+
+        public string ShoppingCartUnits
+        {
+            get => $"{Units} units";
+        }
+
+        public string InventoryUnits
+        {
+            get => $"{Units} in stock";
+        }
+
+        public string InventoryPrice
+        {
+            get => $"${UnitPrice} ea.";
+        }
+
+        public string ShoppingCartPrice
+        {
+            get => $"${Price}";
+        }
     }
 }

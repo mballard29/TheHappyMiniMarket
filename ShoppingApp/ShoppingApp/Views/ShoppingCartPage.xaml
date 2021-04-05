@@ -64,11 +64,11 @@
                                        VerticalOptions="Center" />
                                 <Label Grid.Column="1"
                                        FontSize="Small"
-                                       Text="{Binding UnitsInCart}"
+                                       Text="{Binding ShoppingCartUnits}"
                                        VerticalOptions="Center" />
                                 <Label Grid.Column="2"
                                        FontSize="Small"
-                                       Text="{Binding ItemPrice}"
+                                       Text="{Binding ShoppingCartPrice}"
                                        VerticalOptions="Center" />
                             </Grid>
                         </Frame>
