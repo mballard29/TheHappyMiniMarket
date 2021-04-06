@@ -82,7 +82,7 @@
             <CollectionView.Header>
                 <StackLayout HorizontalOptions="CenterAndExpand">
                     <Button Padding="8"
-                            Command="{Binding ClearCommand}"
+                            Command="{Binding InventoryCommand}"
                             FontSize="22"
                             Text="Welcome to the Happy MiniMarket"
                             VerticalOptions="Center" />

@@ -31,7 +31,7 @@ namespace ShoppingApp.ViewModels
             for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
             {
                 if (i < Cart.Count)
-                    CartPage.Add(Cart[i]);
+                    CartPage.Add(new Product(Cart[i]));
             }
 
             InventoryCommand = new AsyncCommand(GoToInventory);
@@ -39,11 +39,25 @@ namespace ShoppingApp.ViewModels
             DeleteCommand = new AsyncCommand<Product>(Delete);
             PreviousCommand = new Command(Previous);
             NextCommand = new Command(Next);
-        }        
+        }
+
+        public override string Subtotal
+        {
+            get
+            {
+                decimal sub = 0m;
+                foreach (Product x in Cart)
+                    sub += x.Price;
+                subtotal = sub;
+                return $"Cart Subtotal: {sub}";
+
+            }
+        }
 
         async Task GoToInventory()
         {
             await Shell.Current.GoToAsync("//InventoryPage");
+            ReloadPage();
         }
 
         async Task Refresh()
@@ -58,28 +72,22 @@ namespace ShoppingApp.ViewModels
 
         async Task Delete(Product product)
         {
-            if (product == null) 
-                return;
-            try
-            {
-                Cart.Remove(Cart.Single(x => x.Id == product.Id));
-                await Application.Current.MainPage.DisplayAlert("Deleted", product.Name, "OK");
-            }
-            catch (System.InvalidOperationException)
-            {
-                Console.WriteLine($"Cart does not contain instance of {product.Name}");
-            }
+            Cart.Remove(Cart.FirstOrDefault(x => x.Id.Equals(product.Id)));
             ReloadPage();
+            OnPropertyChanged(nameof(Cart));
+            OnPropertyChanged(nameof(Inventory));
+            await Application.Current.MainPage.DisplayAlert("Deleted", product.Name, "OK");
         }
 
-        private void ReloadPage()
+        public override void ReloadPage()
         {
             CartPage.Clear();
             for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
             {
                 if (i < Cart.Count)
-                    CartPage.Add(Cart[i]);
+                    CartPage.Add(new Product(Cart[i]));
             }
+            OnPropertyChanged(nameof(Subtotal));
         }
 
         private void Previous()
