@@ -64,7 +64,7 @@ namespace ShoppingApp.ViewModels
         async Task Refresh()
         {
             IsBusy = true;
-            await Task.Delay(2000);
+            await Task.Delay(1000);
 
             ReloadPage();
 
@@ -75,14 +75,13 @@ namespace ShoppingApp.ViewModels
         {
             Inventory.Remove(Cart.FirstOrDefault(x => x.Id.Equals(product.Id)));
             ReloadPage();
-            OnPropertyChanged(nameof(Inventory));
             await Application.Current.MainPage.DisplayAlert("Deleted", product.Name, "OK");
         }
 
         async Task Add(Product product)
         {
             var req_val = await Application.Current.MainPage.DisplayPromptAsync(
-                product.Name, "How many would you?", "SAVE", "CANCEL", placeholder: $"{product.Units}", keyboard: Keyboard.Numeric);
+                product.Name, "How many would you like?", "SAVE", "CANCEL", placeholder: $"{product.Units} in stock", keyboard: Keyboard.Numeric);
             if (int.TryParse(req_val, out int val))
             {
                 if (val < 0 || val > product.Units)
@@ -102,7 +101,6 @@ namespace ShoppingApp.ViewModels
                     await Delete(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));
                 await Application.Current.MainPage.DisplayAlert($"Added {product.Name} to Cart", $"{val} units", "OK");
                 ReloadPage();
-                OnPropertyChanged(nameof(Cart));
             }
         }
 
@@ -114,6 +112,8 @@ namespace ShoppingApp.ViewModels
                 if (i < Inventory.Count)
                     InventoryPage.Add(new Product(Inventory[i]));
             }
+            OnPropertyChanged(nameof(Cart));
+            OnPropertyChanged(nameof(Inventory));
             OnPropertyChanged(nameof(Subtotal));
         }
 

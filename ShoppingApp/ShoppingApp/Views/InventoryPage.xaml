@@ -82,7 +82,7 @@
             </CollectionView.Header>
             <CollectionView.Footer>
                 <Grid Padding="10">
-                    <Label Text="{Binding Subtotal}" />
+                    <Label Grid.Column="1" Text="{Binding Subtotal}" />
                     <Button Grid.Row="1"
                             Command="{Binding PreviousCommand}"
                             Text="Previous" />
