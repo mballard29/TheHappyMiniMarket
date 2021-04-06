@@ -16,7 +16,8 @@ namespace ShoppingApp.ViewModels
     {        
         public ObservableRangeCollection<Product> CartPage { get; set; }
 
-        public AsyncCommand InventoryCommand { get; set; }
+        public AsyncCommand InventoryCommand { get; }
+        public AsyncCommand CheckoutCommand { get; }
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand<Product> DeleteCommand { get; }
         public AsyncCommand<Product> EditCommand { get; }
@@ -37,6 +38,7 @@ namespace ShoppingApp.ViewModels
             }
 
             InventoryCommand = new AsyncCommand(GoToInventory);
+            CheckoutCommand = new AsyncCommand(Checkout);
             RefreshCommand = new AsyncCommand(Refresh);
             DeleteCommand = new AsyncCommand<Product>(Delete);
             EditCommand = new AsyncCommand<Product>(Edit);
@@ -60,6 +62,12 @@ namespace ShoppingApp.ViewModels
         {
             await Shell.Current.GoToAsync("//InventoryPage");
             ReloadPage();
+        }
+
+        async Task Checkout()
+        {
+            ReloadPage();
+            await Shell.Current.GoToAsync("//ReceiptPage");
         }
 
         async Task Refresh()

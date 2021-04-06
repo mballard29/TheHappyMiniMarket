@@ -1,12 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage x:Class="ShoppingApp.Views.ReceiptPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ShoppingApp.Views.ReceiptPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:helpers="clr-namespace:ShoppingApp.Helpers"
+             xmlns:local="clr-namespace:ShoppingApp.ViewModels"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <ContentPage.BindingContext>
+        <local:ReceiptViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid Padding="15">
+        <Label Text="{Binding ReceiptString}"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="CenterAndExpand"
+               FontSize="Medium" />
+        <Label Grid.Row="1"
+               Padding="10"
+               FontFamily="FASolid"
+               FontSize="50"
+               HorizontalOptions="CenterAndExpand"
+               Text="{x:Static helpers:FAIcons.Barcode}"
+               VerticalOptions="Center" />
+        <Button Grid.Row="2"
+                Text="SAVE"
+                Command="{Binding SaveCommand}"
+                VerticalOptions="End" />
+    </Grid>
+
 </ContentPage>

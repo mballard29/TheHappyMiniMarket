@@ -43,7 +43,7 @@ namespace ShoppingApp.Models
         [JsonIgnore]
         public decimal Price
         {
-            get => Units * UnitPrice;
+            get => Decimal.Round(Units * UnitPrice, 2);
         }
 
         public Product()

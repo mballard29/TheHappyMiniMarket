@@ -29,7 +29,7 @@
                            FontFamily="FASolid"
                            FontSize="50"
                            HorizontalOptions="CenterAndExpand"
-                           Text="{x:Static helpers:FAIcons.FrownOpen}"
+                           Text="{x:Static helpers:FAIcons.ShoppingBag}"
                            VerticalOptions="Center" />
                     <Label Padding="20"
                            FontSize="Medium"

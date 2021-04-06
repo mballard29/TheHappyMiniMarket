@@ -1,8 +1,10 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Newtonsoft.Json;
 using ShoppingApp.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,7 +75,7 @@ namespace ShoppingApp.ViewModels
 
         async Task Delete(Product product)
         {
-            Inventory.Remove(Cart.FirstOrDefault(x => x.Id.Equals(product.Id)));
+            Inventory.Remove(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));
             ReloadPage();
             await Application.Current.MainPage.DisplayAlert("Deleted", product.Name, "OK");
         }
@@ -94,11 +96,10 @@ namespace ShoppingApp.ViewModels
                 else
                 {
                     Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units += val;
-                    Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units -= val;
                 }
                 Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units -= val;
                 if (Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units == 0)
-                    await Delete(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));
+                    Inventory.Remove(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));
                 await Application.Current.MainPage.DisplayAlert($"Added {product.Name} to Cart", $"{val} units", "OK");
                 ReloadPage();
             }
