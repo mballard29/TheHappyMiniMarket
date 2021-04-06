@@ -53,7 +53,7 @@ namespace ShoppingApp.ViewModels
                 foreach (Product x in Cart)
                     sub += x.Price;
                 subtotal = sub;
-                return $"Cart Subtotal: {sub}";
+                return $"Cart Subtotal: ${sub}";
             }
         }
 

@@ -25,15 +25,15 @@ namespace ShoppingApp.ViewModels
             }
             if (Inventory == null)
             {
-                string localpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                string fileName = $"{localpath}/saveFile.txt";
-                if (File.Exists(fileName))
-                {
-                    Inventory = new ObservableRangeCollection<Product>();
-                    Inventory = JsonConvert.DeserializeObject<ObservableRangeCollection<Product>>(File.ReadAllText(fileName));
-                }
-                else
-                {
+                //string localpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                //string fileName = $"{localpath}/saveFile.txt";
+                //if (File.Exists(fileName))
+                //{
+                //    Inventory = new ObservableRangeCollection<Product>();
+                //    Inventory = JsonConvert.DeserializeObject<ObservableRangeCollection<Product>>(File.ReadAllText(fileName));
+                //}
+                //else
+                //{
                     Inventory = new ObservableRangeCollection<Product>
                     {
                         new Product { Name = "Avocado", Description = "Hass Avocado", Units = 10, UnitPrice = 0.58m },
@@ -57,7 +57,7 @@ namespace ShoppingApp.ViewModels
                         new Product { Name = "Trail Mix", Description = "GourmetNut Power Up Mega Omega Trail Mix", Units = 10, UnitPrice = 0.36m },
                         new Product { Name = "Lemons", Description = "Lemons", Units = 10, UnitPrice = 0.54m }
                     };
-                }
+                //}
             }
         }
 
