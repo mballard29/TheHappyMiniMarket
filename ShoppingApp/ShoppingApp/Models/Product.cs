@@ -9,7 +9,7 @@ namespace ShoppingApp.Models
 {
     public class Product : ObservableObject
     {
-        public Guid Id { get; protected set; }
+        public Guid Id { get; private set; }
         public string Name { get; set; }
         public string Description { get; set; }
         private int units;
@@ -40,7 +40,6 @@ namespace ShoppingApp.Models
             }
         }
 
-        [JsonIgnore]
         public decimal Price
         {
             get => Decimal.Round(Units * UnitPrice, 2);
@@ -60,25 +59,21 @@ namespace ShoppingApp.Models
             UnitPrice = product.UnitPrice;
         }
 
-        [JsonIgnore]
         public string ShoppingCartUnits
         {
             get => $"{Units} units";
         }
 
-        [JsonIgnore]
         public string InventoryUnits
         {
             get => $"{Units} in stock";
         }
 
-        [JsonIgnore]
         public string ShoppingCartPrice
         {
             get => $"${string.Format("{0:0.00}", Price)}";
         }
 
-        [JsonIgnore]
         public string InventoryPrice
         {
             get => $"${string.Format("{0:0.00}", UnitPrice)} ea.";

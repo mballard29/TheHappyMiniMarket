@@ -20,7 +20,7 @@ namespace ShoppingApp.ViewModels
         public ReceiptViewModel()
         {
             SaveCommand = new AsyncCommand(Save);
-            localpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            localpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
 
         public decimal Tax = Decimal.Round(subtotal * 0.07m, 2);
@@ -44,10 +44,11 @@ namespace ShoppingApp.ViewModels
 
         async Task Save()
         {
-            File.WriteAllText($"{localpath}/ReceiptFile.txt", ReceiptString);
-            File.WriteAllText($"{localpath}/saveFile.txt", JsonConvert.SerializeObject(nameof(Inventory)));
+            File.WriteAllText(Path.Combine(localpath, "ReceiptFile.txt"), ReceiptString);
+            string json = JsonConvert.SerializeObject(Inventory, Formatting.Indented);
+            File.WriteAllText(Path.Combine(localpath, "saveFile.txt"), json);
             await Task.Delay(3000);
-            Application.Current.Quit();
+            // Application.Current.Quit();
         }
     }
 }

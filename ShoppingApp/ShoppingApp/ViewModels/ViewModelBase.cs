@@ -7,6 +7,9 @@ using System.IO;
 using System.Text;
 using Xamarin.Forms;
 
+
+using System.Diagnostics;
+
 namespace ShoppingApp.ViewModels
 {
     public class ViewModelBase : BaseViewModel
@@ -25,15 +28,15 @@ namespace ShoppingApp.ViewModels
             }
             if (Inventory == null)
             {
-                //string localpath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                //string fileName = $"{localpath}/saveFile.txt";
-                //if (File.Exists(fileName))
-                //{
-                //    Inventory = new ObservableRangeCollection<Product>();
-                //    Inventory = JsonConvert.DeserializeObject<ObservableRangeCollection<Product>>(File.ReadAllText(fileName));
-                //}
-                //else
-                //{
+                Inventory = new ObservableRangeCollection<Product>();
+                string localpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                if (File.Exists(Path.Combine(localpath, "saveFile.txt")))
+                {
+                    Debug.WriteLine(File.ReadAllText(Path.Combine(localpath, "saveFile.txt")));
+                    Inventory = JsonConvert.DeserializeObject<ObservableRangeCollection<Product>>(File.ReadAllText(Path.Combine(localpath, "saveFile.txt")));
+                }
+                else
+                {
                     Inventory = new ObservableRangeCollection<Product>
                     {
                         new Product { Name = "Avocado", Description = "Hass Avocado", Units = 10, UnitPrice = 0.58m },
@@ -57,7 +60,7 @@ namespace ShoppingApp.ViewModels
                         new Product { Name = "Trail Mix", Description = "GourmetNut Power Up Mega Omega Trail Mix", Units = 10, UnitPrice = 0.36m },
                         new Product { Name = "Lemons", Description = "Lemons", Units = 10, UnitPrice = 0.54m }
                     };
-                //}
+                }
             }
         }
 
