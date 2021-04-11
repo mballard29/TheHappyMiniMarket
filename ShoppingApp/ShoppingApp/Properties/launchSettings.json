@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ShoppingApp": {
+      "commandName": "Project"
+    },
+    "IIS Express": {
+      "commandName": "Executable"
+    }
+  }
+}

@@ -1,12 +1,9 @@
 ﻿using MvvmHelpers;
 using Newtonsoft.Json;
-using ShoppingApp.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Xamarin.Forms;
-
+using Library.Models;
 
 using System.Diagnostics;
 

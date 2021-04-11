@@ -1,14 +1,9 @@
 ﻿using MvvmHelpers.Commands;
 using Newtonsoft.Json;
-using ShoppingApp.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using Command = MvvmHelpers.Commands.Command;
+using Library.Models;
 
 namespace ShoppingApp.ViewModels
 {
@@ -34,9 +29,9 @@ namespace ShoppingApp.ViewModels
                 {
                     receipt_text += $"{x.Name}, {x.Units} units * ${x.UnitPrice} = ${x.Price}\n";
                 }
-                receipt_text += $"\nSubtotal:                 ${subtotal}\n";
-                receipt_text +=   $"Tax:            7.0%      ${Tax}\n";
-                receipt_text += $"Total:                      ${Tax + subtotal}\n\n";
+                receipt_text += $"\nSubtotal:                 ${string.Format("{0:0.00}", subtotal)}";
+                receipt_text +=   $"Tax:            7.0%      ${string.Format("{0:0.00}", Decimal.Round(Tax, 2))}\n";
+                receipt_text += $"Total:                      ${string.Format("{0:0.00}", subtotal + Tax)}\n\n";
                 receipt_text += "Shop with us again!\n";
                 return receipt_text;
             }

@@ -1,14 +1,10 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
-using Newtonsoft.Json;
-using ShoppingApp.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Library.Models;
 using Command = MvvmHelpers.Commands.Command;
 
 namespace ShoppingApp.ViewModels
@@ -53,7 +49,7 @@ namespace ShoppingApp.ViewModels
                 foreach (Product x in Cart)
                     sub += x.Price;
                 subtotal = sub;
-                return $"Cart Subtotal: ${sub}";
+                return $"Cart Subtotal: ${string.Format("{0:0.00}", sub)}";
             }
         }
 

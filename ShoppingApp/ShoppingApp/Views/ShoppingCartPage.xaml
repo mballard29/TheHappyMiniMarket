@@ -27,13 +27,13 @@
                     <Label Padding="50" Text="" />
                     <Label Padding="10"
                            FontFamily="FASolid"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="Center"
                            FontSize="50"
-                           HorizontalOptions="CenterAndExpand"
-                           Text="{x:Static helpers:FAIcons.ShoppingBag}"
-                           VerticalOptions="Center" />
+                           Text="{x:Static helpers:FAIcons.ShoppingBag}" />
                     <Label Padding="20"
-                           FontSize="Medium"
                            HorizontalOptions="CenterAndExpand"
+                           FontSize="Medium"
                            Text="Cart currently empty!" />
                     <Button Command="{Binding InventoryCommand}" Text="Search Inventory" />
                 </StackLayout>
@@ -44,16 +44,16 @@
                         <SwipeView.LeftItems>
                             <SwipeItems>
                                 <SwipeItem BackgroundColor="LightGoldenrodYellow"
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=EditCommand, Mode=TwoWay}"
                                            CommandParameter="{Binding .}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=EditCommand, Mode=TwoWay}"
                                            Text="Edit" />
                             </SwipeItems>
                         </SwipeView.LeftItems>
                         <SwipeView.RightItems>
                             <SwipeItems>
                                 <SwipeItem BackgroundColor="{StaticResource DeleteColor}"
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=DeleteCommand, Mode=TwoWay}"
                                            CommandParameter="{Binding .}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:ShoppingCartViewModel}}, Path=DeleteCommand, Mode=TwoWay}"
                                            Text="Delete" />
                             </SwipeItems>
                         </SwipeView.RightItems>
@@ -62,17 +62,17 @@
                                    CornerRadius="8"
                                    HasShadow="True">
                                 <Grid ColumnDefinitions="*,*,*">
-                                    <Label FontSize="Medium"
-                                           Text="{Binding Name}"
-                                           VerticalOptions="Center" />
+                                    <Label VerticalOptions="Center"
+                                           FontSize="Medium"
+                                           Text="{Binding Name}" />
                                     <Label Grid.Column="1"
+                                           VerticalOptions="Center"
                                            FontSize="Small"
-                                           Text="{Binding ShoppingCartUnits}"
-                                           VerticalOptions="Center" />
+                                           Text="{Binding ShoppingCartUnits}" />
                                     <Label Grid.Column="2"
+                                           VerticalOptions="Center"
                                            FontSize="Small"
-                                           Text="{Binding ShoppingCartPrice}"
-                                           VerticalOptions="Center" />
+                                           Text="{Binding ShoppingCartPrice}" />
                                 </Grid>
                             </Frame>
                         </Grid>
@@ -82,10 +82,10 @@
             <CollectionView.Header>
                 <StackLayout HorizontalOptions="CenterAndExpand">
                     <Button Padding="8"
+                            VerticalOptions="Center"
                             Command="{Binding InventoryCommand}"
                             FontSize="22"
-                            Text="Welcome to the Happy MiniMarket"
-                            VerticalOptions="Center" />
+                            Text="Welcome to the Happy MiniMarket" />
                 </StackLayout>
             </CollectionView.Header>
             <CollectionView.Footer>

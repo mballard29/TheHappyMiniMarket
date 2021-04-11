@@ -1,13 +1,10 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
-using ShoppingApp.Models;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Library.Models;
 using Command = MvvmHelpers.Commands.Command;
 
 namespace ShoppingApp.ViewModels
@@ -54,7 +51,7 @@ namespace ShoppingApp.ViewModels
                 foreach (Product x in Cart)
                     sub += x.Price;
                 subtotal = sub;
-                return $"Cart Subtotal: ${sub}";
+                return $"Cart Subtotal: ${string.Format("{0:0.00}", sub)}";
             }
         }
 
@@ -73,7 +70,7 @@ namespace ShoppingApp.ViewModels
         async Task Refresh()
         {
             IsBusy = true;
-            await Task.Delay(2000);
+            await Task.Delay(1000);
 
             ReloadPage();
 
@@ -83,6 +80,8 @@ namespace ShoppingApp.ViewModels
         async Task Delete(Product product)
         {
             Cart.Remove(Cart.FirstOrDefault(x => x.Id.Equals(product.Id)));
+            if (Inventory.Any(x => x.Id.Equals(product.Id)))
+                Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units += product.Units;
             ReloadPage();
             await Application.Current.MainPage.DisplayAlert("Deleted", product.Name, "OK");
         }
@@ -93,6 +92,8 @@ namespace ShoppingApp.ViewModels
                 product.Name, "How many would you like?", "SAVE", "CANCEL", placeholder: $"You currently have {product.Units} units", keyboard: Keyboard.Numeric);
             if (int.TryParse(req_val, out int val))
             {
+                if (val > Inventory.FirstOrDefault(x => x.Id.Equals(product.Id))?.Units || val < 0)
+                    return;
                 if (Inventory.Any(x => x.Id.Equals(product.Id)))
                 {
                     Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units -= (val - product.Units);
