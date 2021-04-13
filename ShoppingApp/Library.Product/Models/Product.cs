@@ -41,12 +41,6 @@ namespace Library.Models
             get => Decimal.Round(Units * UnitPrice, 2);
         }
 
-        //public Product()
-        //{
-        //    if (Id != Guid.Empty)
-        //        Id = Guid.NewGuid();
-        //}
-
         public Product()
         {
 

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Library.Models;
 
 namespace ShoppingAppAPI
 {
     public class DataContext
     {
-        List<Product> Inventory = new List<Product>()
+        public static List<Product> Inventory = new List<Product>
         {
             new Product { Id = Guid.NewGuid(), Name = "Avocado", Description = "Hass Avocado", Units = 10, UnitPrice = 0.58m },
             new Product { Id = Guid.NewGuid(), Name = "Bread", Description = "Sunbeam Giant Enriched Bread", Units = 10, UnitPrice = 2.97m },

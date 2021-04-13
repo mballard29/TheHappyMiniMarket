@@ -10,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Library.Models;
 
 namespace ShoppingAppAPI
 {
@@ -27,7 +25,6 @@ namespace ShoppingAppAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ShoppingAppContext>(opt => opt.UseInMemoryDatabase("ShoppingAppDb"));
             services.AddControllers();
         }
 

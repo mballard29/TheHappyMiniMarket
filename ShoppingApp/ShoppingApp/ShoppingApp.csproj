@@ -52,10 +52,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Library.Product">
       <HintPath>..\Library.Product\bin\Debug\netcoreapp3.1\Library.Product.dll</HintPath>
     </Reference>

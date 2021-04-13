@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Library.Models;
 using Command = MvvmHelpers.Commands.Command;
+using ShoppingApp.Services;
 
 namespace ShoppingApp.ViewModels
 {
@@ -63,6 +64,10 @@ namespace ShoppingApp.ViewModels
         {
             IsBusy = true;
             await Task.Delay(1000);
+
+            var inventory = await ShoppingAppService.GetInventory();
+
+            Inventory.AddRange(inventory);
 
             ReloadPage();
 
