@@ -73,11 +73,14 @@
             </CollectionView.ItemTemplate>
             <CollectionView.Header>
                 <StackLayout HorizontalOptions="CenterAndExpand">
-                    <Button Padding="22"
+                    <Button Padding="13"
                             Command="{Binding ShoppingCartCommand}"
                             FontSize="22"
-                            Text="Our Inventory"
+                            Text="Welcome to the Happy MiniMarket"
                             VerticalOptions="Center" />
+                    <Label Text="Our Inventory:"
+                           HorizontalOptions="CenterAndExpand"
+                           FontSize="Medium" />
                 </StackLayout>
             </CollectionView.Header>
             <CollectionView.Footer>

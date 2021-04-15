@@ -3,11 +3,11 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://localhost/ShoppingAppAPI",
+      "applicationUrl": "http://192.168.56.1/ShoppingAppAPI",
       "sslPort": 0
     },
     "iisExpress": {
-      "applicationUrl": "http://localhost:60278",
+      "applicationUrl": "http://192.168.56.1:60278",
       "sslPort": 44390
     }
   },
@@ -23,11 +23,11 @@
     "ShoppingAppAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "inventory",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+      "applicationUrl": "https://192.168.56.1:5001;http://192.168.56.1:5000"
     }
   }
 }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Library.Models;
 using Command = MvvmHelpers.Commands.Command;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace ShoppingApp.ViewModels
 {
@@ -16,6 +19,7 @@ namespace ShoppingApp.ViewModels
         public AsyncCommand InventoryCommand { get; }
         public AsyncCommand CheckoutCommand { get; }
         public AsyncCommand RefreshCommand { get; }
+        public AsyncCommand ClearCommand { get; }
         public AsyncCommand<Product> DeleteCommand { get; }
         public AsyncCommand<Product> EditCommand { get; }
         public Command PreviousCommand { get; }
@@ -23,20 +27,20 @@ namespace ShoppingApp.ViewModels
 
         int Page;
 
+        private HttpClient Client { get; }
+
         public ShoppingCartViewModel()
         {
+            Client = new HttpClient();
             CartPage = new ObservableRangeCollection<Product>();
             Page = 0;
 
-            for (int i = 5 * Page; i <= (5 * Page) + 4; i++)
-            {
-                if (i < Cart.Count)
-                    CartPage.Add(new Product(Cart[i]));
-            }
+            ReloadPage();
 
             InventoryCommand = new AsyncCommand(GoToInventory);
             CheckoutCommand = new AsyncCommand(Checkout);
             RefreshCommand = new AsyncCommand(Refresh);
+            ClearCommand = new AsyncCommand(Empty);
             DeleteCommand = new AsyncCommand<Product>(Delete);
             EditCommand = new AsyncCommand<Product>(Edit);
             PreviousCommand = new Command(Previous);
@@ -75,6 +79,25 @@ namespace ShoppingApp.ViewModels
             ReloadPage();
 
             IsBusy = false;
+        }
+        private async Task Empty()
+        {
+            foreach (Product p in Cart)
+            {
+                if (Inventory.Any(x => x.Id.Equals(p.Id)))
+                {
+                    Inventory.FirstOrDefault(x => x.Id.Equals(p.Id)).Units += p.Units;
+                }
+                else
+                {
+                    var product = new Product(p);
+                    var json = JsonConvert.SerializeObject(product);
+                    await Client.PostAsync("http://192.168.56.1/ShoppingAppAPI/inventory/", new StringContent(json, Encoding.UTF8, "application/json"));
+                    Inventory.Add(new Product(p));
+                }
+            }
+            Cart.Clear();
+            ReloadPage();
         }
 
         async Task Delete(Product product)

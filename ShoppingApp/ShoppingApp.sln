@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingApp.iOS", "Shopping
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingApp", "ShoppingApp\ShoppingApp.csproj", "{40E3B141-1C49-4E81-A415-8DFE566A4A8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Product", "Library.Product\Library.Product.csproj", "{89149B7B-CC7D-4722-876E-A0FA172C2C47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Product", "Library.Product\Library.Product.csproj", "{89149B7B-CC7D-4722-876E-A0FA172C2C47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

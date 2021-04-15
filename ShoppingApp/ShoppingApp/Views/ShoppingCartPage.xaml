@@ -81,11 +81,14 @@
             </CollectionView.ItemTemplate>
             <CollectionView.Header>
                 <StackLayout HorizontalOptions="CenterAndExpand">
-                    <Button Padding="8"
+                    <Button Padding="13"
                             VerticalOptions="Center"
                             Command="{Binding InventoryCommand}"
                             FontSize="22"
-                            Text="Welcome to the Happy MiniMarket" />
+                            Text="The Happy MiniMarket" />
+                    <Label Text="Your Cart:"
+                           HorizontalOptions="CenterAndExpand"
+                           FontSize="Medium" />
                 </StackLayout>
             </CollectionView.Header>
             <CollectionView.Footer>
@@ -99,9 +102,12 @@
                             Command="{Binding NextCommand}"
                             Text="Next" />
                     <Button Grid.Row="2"
-                            Grid.ColumnSpan="2"
                             Command="{Binding CheckoutCommand}"
                             Text="Checkout" />
+                    <Button Grid.Row="2"
+                            Grid.Column="1"
+                            Command="{Binding ClearCommand}"
+                            Text="Clear" />
                 </Grid>
             </CollectionView.Footer>
         </CollectionView>

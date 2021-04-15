@@ -29,5 +29,7 @@ namespace ShoppingAppAPI
             new Product { Id = Guid.NewGuid(), Name = "Trail Mix", Description = "GourmetNut Power Up Mega Omega Trail Mix", Units = 10, UnitPrice = 0.36m },
             new Product { Id = Guid.NewGuid(), Name = "Lemons", Description = "Lemons", Units = 10, UnitPrice = 0.54m }
         };
+
+        public static List<Product> Cart = new List<Product>();
     }
 }
