@@ -9,6 +9,7 @@ using Command = MvvmHelpers.Commands.Command;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
+using ShoppingApp.Services;
 
 namespace ShoppingApp.ViewModels
 {
@@ -17,7 +18,6 @@ namespace ShoppingApp.ViewModels
         public ObservableRangeCollection<Product> InventoryPage { get; set; }
         
         public AsyncCommand RefreshCommand { get; }
-        public AsyncCommand<Product> DeleteCommand { get; }
         public AsyncCommand<Product> AddCommand { get; }
         public Command PreviousCommand { get; }
         public Command NextCommand { get; }
@@ -32,7 +32,6 @@ namespace ShoppingApp.ViewModels
             ReloadPage();
 
             RefreshCommand = new AsyncCommand(Refresh);
-            DeleteCommand = new AsyncCommand<Product>(Delete);
             AddCommand = new AsyncCommand<Product>(Add);
             PreviousCommand = new Command(Previous);
             NextCommand = new Command(Next);
@@ -60,13 +59,6 @@ namespace ShoppingApp.ViewModels
             IsBusy = false;
         }
 
-        async Task Delete(Product product)
-        {
-            Inventory.Remove(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));
-            ReloadPage();
-            await Application.Current.MainPage.DisplayAlert("Deleted", product.Name, "OK");
-        }
-
         async Task Add(Product product)
         {
             var req_val = await Application.Current.MainPage.DisplayPromptAsync(
@@ -75,23 +67,24 @@ namespace ShoppingApp.ViewModels
             {
                 if (val < 0 || val > product.Units)
                     return;
-                if (!Cart.Any(x => x.Id.Equals(product.Id)))                            //first time add, update inventory item, delete if need
+                if (!Cart.Any(x => x.Id.Equals(product.Id)))
                 {
-                    Cart.Add(new Product(product));                                         // POST
-                    Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units = val;          // PUT
+                    await CartService.AddProduct(product, val);
+                    Cart.Add(new Product(product));
+                    Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units = val;
                 }
-                else                                                                    //update cart item, update inventory item, delete if needed
-                { 
-                    Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units += val;         // PUT
+                else
+                {
+                    await CartService.UpdateProduct(product, Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units + val);
+                    Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units += val;
                 }
-                //api_product = new Product(product);
-                //api_product.Units -= val;
-                //json = JsonConvert.SerializeObject(api_product);
-                //var url = $"http://192.168.56.1/ShoppingAppAPI/cart/{api_product}";
-                //await Client.PutAsync(url, new StringContent(json, Encoding.UTF8, "application/json"));
+                await InventoryService.UpdateProduct(product, Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units - val);
                 Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units -= val;
                 if (Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units == 0)
-                    Inventory.Remove(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));   // DELETE
+                {
+                    await InventoryService.DeleteProduct(product);
+                    Inventory.Remove(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));
+                }
                 await Application.Current.MainPage.DisplayAlert($"Added {product.Name} to Cart", $"{val} units", "OK");
                 ReloadPage();
             }

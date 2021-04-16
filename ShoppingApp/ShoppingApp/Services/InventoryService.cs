@@ -26,8 +26,8 @@ namespace ShoppingApp.Services
             await Client.PostAsync("http://192.168.56.1/ShoppingAppAPI/inventory/", new StringContent(json, Encoding.UTF8, "application/json"));
         }
 
-        //READ
-        public static async Task<Product> ReadProduct(Product product)
+        //GET/{id}
+        public static async Task<Product> GetProduct(Product product)
         {
             var response = await Client.GetStringAsync($"http://192.168.56.1/ShoppingAppAPI/inventory/{product.Id}").ConfigureAwait(false);
             var ret = JsonConvert.DeserializeObject<Product>(response);
@@ -35,9 +35,10 @@ namespace ShoppingApp.Services
         }
 
         //UPDATE
-        public static async Task UpdateProduct(Product product)
+        public static async Task UpdateProduct(Product product, int units)
         {
-            var json = JsonConvert.SerializeObject(product);
+            var api_product = new Product { Id = product.Id, Name = product.Name, Description = product.Description, Units = units, UnitPrice = product.UnitPrice };
+            var json = JsonConvert.SerializeObject(api_product);
             await Client.PutAsync($"http://192.168.56.1/ShoppingAppAPI/inventory/{product.Id}", new StringContent(json, Encoding.UTF8, "application/json"));
         }
 

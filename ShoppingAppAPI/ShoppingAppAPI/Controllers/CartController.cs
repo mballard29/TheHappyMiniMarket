@@ -40,9 +40,6 @@ namespace ShoppingAppAPI.Controllers
             if (product == null)
                 return BadRequest();
 
-            if (product.Id == Guid.Empty)
-                product.Id = Guid.NewGuid();
-
             DataContext.Cart.Add(product);
 
             return Ok(product);

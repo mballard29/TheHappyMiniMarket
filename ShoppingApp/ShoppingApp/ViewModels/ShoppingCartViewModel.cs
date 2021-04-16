@@ -69,31 +69,41 @@ namespace ShoppingApp.ViewModels
 
             IsBusy = false;
         }
+
         private async Task Empty()
         {
             foreach (Product p in Cart)
             {
                 if (Inventory.Any(x => x.Id.Equals(p.Id)))
                 {
-                    
+                    await InventoryService.UpdateProduct(p, Inventory.FirstOrDefault(x=> x.Id.Equals(p.Id)).Units + p.Units);
                     Inventory.FirstOrDefault(x => x.Id.Equals(p.Id)).Units += p.Units;
                 }
                 else
                 {
-                    InventoryService.AddProduct(p, p.Units);
+                    await InventoryService.AddProduct(p, p.Units);
                     Inventory.Add(new Product(p));
                 }
             }
-            //await Client.DeleteAsync("http://192.168.56.1/ShoppingAppAPI/cart/clear");
+            await CartService.ClearProducts();
             Cart.Clear();
             ReloadPage();
         }
 
         async Task Delete(Product product)
         {
+            await CartService.DeleteProduct(product);
             Cart.Remove(Cart.FirstOrDefault(x => x.Id.Equals(product.Id)));
             if (Inventory.Any(x => x.Id.Equals(product.Id)))
+            {
+                await InventoryService.UpdateProduct(product, Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units + product.Units);
                 Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units += product.Units;
+            }
+            else
+            {
+                await InventoryService.AddProduct(product, product.Units);
+                Inventory.Add(new Product(product));
+            }
             ReloadPage();
             await Application.Current.MainPage.DisplayAlert("Deleted", product.Name, "OK");
         }
@@ -104,31 +114,41 @@ namespace ShoppingApp.ViewModels
                 product.Name, "How many would you like?", "SAVE", "CANCEL", placeholder: $"You currently have {product.Units} units", keyboard: Keyboard.Numeric);
             if (int.TryParse(req_val, out int val))
             {
-                if (val > Inventory.FirstOrDefault(x => x.Id.Equals(product.Id))?.Units || val < 0)
+                if (val == product.Units || val < 0)
+                    return;
+                if (val > Inventory.FirstOrDefault(x => x.Id.Equals(product.Id))?.Units && val > product.Units)
                     return;
                 if (Inventory.Any(x => x.Id.Equals(product.Id)))
                 {
+                    await InventoryService.UpdateProduct(product, Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units - (val - product.Units));
                     Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units -= (val - product.Units);
+                    await CartService.UpdateProduct(product, val);
                     Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units = val;
                     if (Inventory.FirstOrDefault(x => x.Id.Equals(product.Id))?.Units == 0)
+                    {
+                        await InventoryService.DeleteProduct(product);
                         Inventory.Remove(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));
+                    }
                     if (Cart.FirstOrDefault(x => x.Id.Equals(product.Id))?.Units == 0)
+                    {
+                        await CartService.DeleteProduct(product);
                         Cart.Remove(Cart.FirstOrDefault(x => x.Id.Equals(product.Id)));
+                    }
                     ReloadPage();
                 }
                 else
                 {
-                    if (val > product.Units)
-                        return;
-                    else
+                    await InventoryService.AddProduct(product, Math.Abs(val - product.Units));
+                    Inventory.Add(new Product(product));
+                    Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units = Math.Abs(val - product.Units);
+                    await CartService.UpdateProduct(product, val);
+                    Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units = val;
+                    if (Cart.FirstOrDefault(x => x.Id.Equals(product.Id))?.Units == 0)
                     {
-                        Inventory.Add(new Product(product));
-                        Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units = (product.Units - val);
-                        Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units = val;
-                        if (Cart.FirstOrDefault(x => x.Id.Equals(product.Id))?.Units == 0)
-                            Cart.Remove(Cart.FirstOrDefault(x => x.Id.Equals(product.Id)));
-                        ReloadPage();
+                        await CartService.DeleteProduct(product);
+                        Cart.Remove(Cart.FirstOrDefault(x => x.Id.Equals(product.Id)));
                     }
+                    ReloadPage();
                 }
                 await Application.Current.MainPage.DisplayAlert("Edited", val > product.Units ? $"+{val - product.Units} units of {product.Name}" : $"-{val - product.Units} units of {product.Name}", "OK");
             }
