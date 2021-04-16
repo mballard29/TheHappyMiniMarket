@@ -15,14 +15,12 @@ namespace ShoppingAppAPI.Controllers
     {
         private readonly ShoppingAppContext _context;
 
-        // GET: Cart
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetCart()
         {
             return Ok(DataContext.Cart);
         }
 
-        // GET: Cart/5
         [HttpGet("{id}")]
         public ActionResult<Product> GetProduct(Guid id)
         {
@@ -36,41 +34,6 @@ namespace ShoppingAppAPI.Controllers
             return Ok(product);
         }
 
-        // PUT: Cart/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(Guid id, Product product)
-        {
-            if (id != product.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(product).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: Cart
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public ActionResult<Product> PostProduct([FromBody] Product product)
         {
@@ -85,23 +48,33 @@ namespace ShoppingAppAPI.Controllers
             return Ok(product);
         }
 
-        // DELETE: Cart/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> DeleteProduct(Guid id)
+        [HttpPut("{id}")]
+        public IActionResult PutProduct(Guid id, Product product)
         {
-            var product = await _context.Inventory.FindAsync(id);
+            if (id != product.Id || !ProductExists(id))
+            {
+                return BadRequest();
+            }
+
+            DataContext.Cart.FirstOrDefault(x => x.Id.Equals(id)).Units = product.Units;
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Product> DeleteProduct(Guid id)
+        {
+            var product = DataContext.Cart.FirstOrDefault(x => x.Id.Equals(id));
             if (product == null)
             {
                 return NotFound();
             }
 
-            _context.Inventory.Remove(product);
-            await _context.SaveChangesAsync();
+            DataContext.Cart.Remove(product);
 
-            return product;
+            return Ok(product);
         }
 
-        // DELETE: Cart/5
         [HttpDelete("Clear")]
         public ActionResult<List<Product>> ClearProduct()
         {

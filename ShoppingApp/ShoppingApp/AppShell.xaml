@@ -84,6 +84,10 @@
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
 
+    <TabBar>
+        <ShellContent Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}" />
+    </TabBar>
+
     <FlyoutItem Title="Inventory">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FASolid"

@@ -13,15 +13,15 @@ namespace ShoppingAppAPI.Controllers
     [ApiController]
     public class InventoryController : ControllerBase
     {
+        private readonly ShoppingAppContext _context;
+
         // GET: Inventory
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetInventory()
         {
-            //return await _context.Inventory.ToListAsync();
             return Ok(DataContext.Inventory);
         }
 
-        // GET: Inventory/5
         [HttpGet("{id}")]
         public ActionResult<Product> GetProduct(Guid id)
         {
@@ -35,73 +35,70 @@ namespace ShoppingAppAPI.Controllers
             return Ok(product);
         }
 
-        // PUT: Inventory/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutProduct(Guid id, Product product)
-        //{
-        //    if (id != product.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    try
-        //    {
-        //        //await _context.SaveChangesAsync();
-        //        DataContext.Inventory.FirstOrDefault(x => x.Id.Equals(id))?.Units = product.Units;
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ProductExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // POST: Inventory
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public ActionResult<Product> PostProduct([FromBody] Product product)
         {
             if (product == null)
                 return BadRequest();
 
-            if (product.Id == Guid.Empty)
-                product.Id = Guid.NewGuid();
-
             DataContext.Inventory.Add(product);
 
             return Ok(product);
         }
 
-        //// DELETE: api/Inventory/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Product>> DeleteProduct(Guid id)
-        //{
-        //    var product = await _context.Inventory.FindAsync(id);
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost("Range")]
+        public ActionResult<IEnumerable<Product>> PostRangeProduct([FromBody] IEnumerable<Product> list)
+        {
+            if (list == null)
+                return BadRequest();
 
-        //    _context.Inventory.Remove(product);
-        //    await _context.SaveChangesAsync();
+            foreach(Product x in list)
+            {
+                DataContext.Inventory.Add(new Product(x));
+            }
 
-        //    return product;
-        //}
+            return Ok(list);
+        }
 
-        //private bool ProductExists(Guid id)
-        //{
-        //    return _context.Inventory.Any(e => e.Id == id);
-        //}
+        [HttpPut("{id}")]
+        public IActionResult PutProduct(Guid id, Product product)
+        {
+            if (id != product.Id || !ProductExists(id))
+            {
+                return BadRequest();
+            }
+
+            DataContext.Inventory.FirstOrDefault(x => x.Id.Equals(id)).Units = product.Units;
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Product> DeleteProduct(Guid id)
+        {
+            var product = DataContext.Inventory.FirstOrDefault(x => x.Id.Equals(id));
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            DataContext.Inventory.Remove(product);
+
+            return Ok(product);
+        }
+
+        [HttpDelete("Clear")]
+        public ActionResult<List<Product>> ClearProduct()
+        {
+            DataContext.Inventory.Clear();
+
+            return DataContext.Inventory;
+        }
+
+        private bool ProductExists(Guid id)
+        {
+            return DataContext.Inventory.Any(e => e.Id == id);
+        }
     }
 }
+

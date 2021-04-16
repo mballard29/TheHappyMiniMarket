@@ -16,7 +16,6 @@ namespace ShoppingApp.ViewModels
     {
         public ObservableRangeCollection<Product> InventoryPage { get; set; }
         
-        public AsyncCommand ShoppingCartCommand { get; }
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand<Product> DeleteCommand { get; }
         public AsyncCommand<Product> AddCommand { get; }
@@ -25,17 +24,13 @@ namespace ShoppingApp.ViewModels
 
         int Page;
 
-        private HttpClient Client { get; }
-
         public InventoryViewModel()
         {
-            Client = new HttpClient();
             InventoryPage = new ObservableRangeCollection<Product>();
             Page = 0;
 
             ReloadPage();
 
-            ShoppingCartCommand = new AsyncCommand(GoToShoppingCart);
             RefreshCommand = new AsyncCommand(Refresh);
             DeleteCommand = new AsyncCommand<Product>(Delete);
             AddCommand = new AsyncCommand<Product>(Add);
@@ -53,12 +48,6 @@ namespace ShoppingApp.ViewModels
                 subtotal = sub;
                 return $"Cart Subtotal: ${string.Format("{0:0.00}", sub)}";
             }
-        }
-
-        async Task GoToShoppingCart()
-        {
-            await Shell.Current.GoToAsync("//ShoppingCartPage");
-            ReloadPage();
         }
 
         async Task Refresh()
@@ -86,11 +75,8 @@ namespace ShoppingApp.ViewModels
             {
                 if (val < 0 || val > product.Units)
                     return;
-                var api_product = new Product { Id = product.Id, Name = product.Name, Description = product.Description, Units = val, UnitPrice = product.UnitPrice };
-                var json = JsonConvert.SerializeObject(api_product);
                 if (!Cart.Any(x => x.Id.Equals(product.Id)))                            //first time add, update inventory item, delete if need
                 {
-                    await Client.PostAsync("http://192.168.56.1/ShoppingAppAPI/cart/", new StringContent(json, Encoding.UTF8, "application/json"));
                     Cart.Add(new Product(product));                                         // POST
                     Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units = val;          // PUT
                 }
@@ -98,6 +84,11 @@ namespace ShoppingApp.ViewModels
                 { 
                     Cart.FirstOrDefault(x => x.Id.Equals(product.Id)).Units += val;         // PUT
                 }
+                //api_product = new Product(product);
+                //api_product.Units -= val;
+                //json = JsonConvert.SerializeObject(api_product);
+                //var url = $"http://192.168.56.1/ShoppingAppAPI/cart/{api_product}";
+                //await Client.PutAsync(url, new StringContent(json, Encoding.UTF8, "application/json"));
                 Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units -= val;
                 if (Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)).Units == 0)
                     Inventory.Remove(Inventory.FirstOrDefault(x => x.Id.Equals(product.Id)));   // DELETE

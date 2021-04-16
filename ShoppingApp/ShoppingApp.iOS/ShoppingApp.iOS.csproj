@@ -157,4 +157,7 @@
       <Name>ShoppingApp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\thehappyminimarket.png" />
+  </ItemGroup>
 </Project>

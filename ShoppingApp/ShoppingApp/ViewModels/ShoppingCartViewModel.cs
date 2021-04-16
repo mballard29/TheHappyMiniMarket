@@ -9,14 +9,13 @@ using Command = MvvmHelpers.Commands.Command;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
+using ShoppingApp.Services;
 
 namespace ShoppingApp.ViewModels
 {
     public class ShoppingCartViewModel : ViewModelBase
     {        
         public ObservableRangeCollection<Product> CartPage { get; set; }
-
-        public AsyncCommand InventoryCommand { get; }
         public AsyncCommand CheckoutCommand { get; }
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand ClearCommand { get; }
@@ -27,17 +26,13 @@ namespace ShoppingApp.ViewModels
 
         int Page;
 
-        private HttpClient Client { get; }
-
         public ShoppingCartViewModel()
         {
-            Client = new HttpClient();
             CartPage = new ObservableRangeCollection<Product>();
             Page = 0;
 
             ReloadPage();
 
-            InventoryCommand = new AsyncCommand(GoToInventory);
             CheckoutCommand = new AsyncCommand(Checkout);
             RefreshCommand = new AsyncCommand(Refresh);
             ClearCommand = new AsyncCommand(Empty);
@@ -57,12 +52,6 @@ namespace ShoppingApp.ViewModels
                 subtotal = sub;
                 return $"Cart Subtotal: ${string.Format("{0:0.00}", sub)}";
             }
-        }
-
-        async Task GoToInventory()
-        {
-            await Shell.Current.GoToAsync("//InventoryPage");
-            ReloadPage();
         }
 
         async Task Checkout()
@@ -86,16 +75,16 @@ namespace ShoppingApp.ViewModels
             {
                 if (Inventory.Any(x => x.Id.Equals(p.Id)))
                 {
+                    
                     Inventory.FirstOrDefault(x => x.Id.Equals(p.Id)).Units += p.Units;
                 }
                 else
                 {
-                    var product = new Product(p);
-                    var json = JsonConvert.SerializeObject(product);
-                    await Client.PostAsync("http://192.168.56.1/ShoppingAppAPI/inventory/", new StringContent(json, Encoding.UTF8, "application/json"));
+                    InventoryService.AddProduct(p, p.Units);
                     Inventory.Add(new Product(p));
                 }
             }
+            //await Client.DeleteAsync("http://192.168.56.1/ShoppingAppAPI/cart/clear");
             Cart.Clear();
             ReloadPage();
         }
