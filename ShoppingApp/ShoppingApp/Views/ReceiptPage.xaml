@@ -14,6 +14,7 @@
     </ContentPage.BindingContext>
 
     <Grid Padding="15">
+
         <Label Text="{Binding ReceiptString}"
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
@@ -26,8 +27,8 @@
                Text="{x:Static helpers:FAIcons.Barcode}"
                VerticalOptions="Center" />
         <Button Grid.Row="2"
-                Text="SAVE"
-                Command="{Binding SaveCommand}"
+                Text="Exit"
+                Command="{Binding ExitCommand}"
                 VerticalOptions="End" />
     </Grid>
 

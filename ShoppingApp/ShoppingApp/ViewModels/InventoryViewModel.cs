@@ -10,6 +10,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
 using ShoppingApp.Services;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ShoppingApp.ViewModels
 {
@@ -21,6 +23,7 @@ namespace ShoppingApp.ViewModels
         public AsyncCommand<Product> AddCommand { get; }
         public Command PreviousCommand { get; }
         public Command NextCommand { get; }
+        public AsyncCommand SearchCommand { get; }
 
         int Page;
 
@@ -35,6 +38,7 @@ namespace ShoppingApp.ViewModels
             AddCommand = new AsyncCommand<Product>(Add);
             PreviousCommand = new Command(Previous);
             NextCommand = new Command(Next);
+            SearchCommand = new AsyncCommand(Search);
         }
 
         public override string Subtotal
@@ -62,7 +66,7 @@ namespace ShoppingApp.ViewModels
         async Task Add(Product product)
         {
             var req_val = await Application.Current.MainPage.DisplayPromptAsync(
-                product.Name, "How many would you like?", "SAVE", "CANCEL", placeholder: $"{product.Units} in stock", keyboard: Keyboard.Numeric);
+                product.Name, Cart.Contains(product) ? "How many would you like?" : "How many more would you like?", "SAVE", "CANCEL", placeholder: $"{product.Units} in stock", keyboard: Keyboard.Numeric);
             if (int.TryParse(req_val, out int val))
             {
                 if (val < 0 || val > product.Units)
@@ -119,6 +123,26 @@ namespace ShoppingApp.ViewModels
 
             Page++;
             ReloadPage();
+        }
+
+        public async Task Search()
+        {
+            var request = await Application.Current.MainPage.DisplayPromptAsync(
+                "Search", "What can we help you find today?", "SEARCH", "CANCEL", placeholder: "search here...");
+
+            if (request != null)
+            {
+                using (HttpClient client = new())
+                {
+                    request = string.Concat(request.Where(c => !Char.IsWhiteSpace(c)));
+                    var subset = await client.GetStringAsync($"http://192.168.56.1/ShoppingAppAPI/inventory/search/{request}").ConfigureAwait(false);
+                    var sublist = JsonConvert.DeserializeObject<IEnumerable<Product>>(subset);
+                    InventoryPage.Clear();
+                    InventoryPage.AddRange(sublist);
+                }
+            }
+            OnPropertyChanged(nameof(InventoryPage));
+            OnPropertyChanged(nameof(Subtotal));
         }
     }
 }

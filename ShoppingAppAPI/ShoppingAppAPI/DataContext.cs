@@ -27,9 +27,13 @@ namespace ShoppingAppAPI
             new Product { Id = Guid.NewGuid(), Name = "Pineapple", Description = "Pineapple", Units = 10, UnitPrice = 2.27m },
             new Product { Id = Guid.NewGuid(), Name = "Tomatoes", Description = "Roma Tomatoes", Units = 10, UnitPrice = 0.29m },
             new Product { Id = Guid.NewGuid(), Name = "Trail Mix", Description = "GourmetNut Power Up Mega Omega Trail Mix", Units = 10, UnitPrice = 0.36m },
-            new Product { Id = Guid.NewGuid(), Name = "Lemons", Description = "Lemons", Units = 10, UnitPrice = 0.54m }
+            new Product { Id = Guid.NewGuid(), Name = "Lemons", Description = "Lemons", Units = 10, UnitPrice = 0.54m },
+            new Product { Id = Guid.NewGuid(), Name = "Avocado", Description = "Maluma Avocado", Units = 10, UnitPrice = 0.58m },
+            new Product { Id = Guid.NewGuid(), Name = "Avocado", Description = "Persea americana Avocado", Units = 10, UnitPrice = 0.58m }
         };
 
         public static List<Product> Cart = new List<Product>();
+
+        public static string Receipt;
     }
 }

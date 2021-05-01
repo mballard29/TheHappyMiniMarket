@@ -13,8 +13,6 @@ namespace ShoppingAppAPI.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        private readonly ShoppingAppContext _context;
-
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetCart()
         {
@@ -32,6 +30,29 @@ namespace ShoppingAppAPI.Controllers
             }
 
             return Ok(product);
+        }
+
+        [HttpGet("receipt")]
+        public ActionResult<string> GetReceipt()
+        {
+            string receipt_text = $"Happy MiniMarket Receipt\n\n";
+            decimal subtotal = 0m;
+            foreach(Product x in DataContext.Cart)
+            {
+                subtotal += x.Price;
+            }
+            foreach (Product x in DataContext.Cart)
+            {
+                receipt_text += $"{x.Name}, {x.Units} units * ${x.UnitPrice} = ${x.Price}\n";
+            }
+            decimal tax = subtotal * 0.07m;
+            receipt_text += $"\nSubtotal:                 ${string.Format("{0:0.00}", subtotal)}\n";
+            receipt_text += $"Tax:            7.0%      ${string.Format("{0:0.00}", Decimal.Round(tax, 2))}\n";
+            receipt_text += $"Total:                      ${string.Format("{0:0.00}", subtotal + tax)}\n\n";
+            receipt_text += "Shop with us again!\n";
+            DataContext.Receipt = receipt_text;
+
+            return Ok(DataContext.Receipt);
         }
 
         [HttpPost]

@@ -2,14 +2,19 @@
 <ContentPage x:Class="ShoppingApp.Views.MainPage"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:ShoppingApp.ViewModels">
+             xmlns:local="clr-namespace:ShoppingApp.ViewModels"
+             xmlns:app="clr-namespace:ShoppingApp">
 
     <ContentPage.BindingContext>
         <local:ViewModelBase />
     </ContentPage.BindingContext>
 
-    <Button FontSize="Medium"
-            Text="Start shopping!"
-            Command="{Binding InventoryCommand}"
-            VerticalOptions="Center" />
+    <StackLayout>
+        <Image Source="{app:ImageResource ShoppingApp.Resources.Images.thehappyminimarket.png}" VerticalOptions="CenterAndExpand" />
+        <Button FontSize="Medium"
+                Text="Start shopping!"
+                Command="{Binding InventoryCommand}"
+                VerticalOptions="End" />
+    </StackLayout>
+
 </ContentPage>

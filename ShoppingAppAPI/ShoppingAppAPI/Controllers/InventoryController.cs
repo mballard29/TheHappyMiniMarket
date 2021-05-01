@@ -13,9 +13,6 @@ namespace ShoppingAppAPI.Controllers
     [ApiController]
     public class InventoryController : ControllerBase
     {
-        private readonly ShoppingAppContext _context;
-
-        // GET: Inventory
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetInventory()
         {
@@ -33,6 +30,27 @@ namespace ShoppingAppAPI.Controllers
             }
 
             return Ok(product);
+        }
+
+        [HttpGet("search/{substring}")]
+        public ActionResult<IEnumerable<Product>> SearchInventory(string substring)
+        {
+            List<Product> results = new List<Product>();
+            substring = substring.ToLower();
+
+            foreach (Product x in DataContext.Inventory)
+            {
+                string query = x.Name + x.Description;
+                query = query.ToLower();
+                var qry = string.Concat(query.Where(c => !Char.IsWhiteSpace(c)));
+
+                if (qry.Contains(substring))
+                {
+                    results.Add(x);
+                }
+            }
+
+            return Ok(results);
         }
 
         [HttpPost]

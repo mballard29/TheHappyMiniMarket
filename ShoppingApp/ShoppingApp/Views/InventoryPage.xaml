@@ -34,8 +34,8 @@
                     <Label Padding="20"
                            FontSize="Medium"
                            HorizontalOptions="CenterAndExpand"
-                           Text="We are currently restocking!" />
-                    <Button Command="{Binding ShoppingCartCommand}" Text="Search Inventory" />
+                           Text="No Results!" />
+                    <Button Command="{Binding ShoppingCartCommand}" Text="Return to Cart" />
                 </StackLayout>
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
@@ -85,7 +85,15 @@
             </CollectionView.Header>
             <CollectionView.Footer>
                 <Grid Padding="10">
-                    <Label Grid.Column="1" Text="{Binding Subtotal}" />
+                    <Button FontFamily="FASolid"
+                            Text="Search"
+                            FontSize="20"
+                            WidthRequest="300"
+                            HorizontalOptions="Center"
+                            BackgroundColor="White"
+                            TextColor="#c39c6b"
+                            Command="{Binding SearchCommand}" />
+                    <Label Grid.Column="1" Text="{Binding Subtotal}" VerticalOptions="Center" TextColor="Black"/>
                     <Button Grid.Row="1"
                             Command="{Binding PreviousCommand}"
                             Text="Previous" />

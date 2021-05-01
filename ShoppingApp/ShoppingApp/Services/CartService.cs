@@ -43,8 +43,6 @@ namespace ShoppingApp.Services
             await Client.PutAsync($"http://192.168.56.1/ShoppingAppAPI/cart/{product.Id}", new StringContent(json, Encoding.UTF8, "application/json"));
         }
 
-
-
         //DELETE
         public static async Task DeleteProduct(Product product)
         {
