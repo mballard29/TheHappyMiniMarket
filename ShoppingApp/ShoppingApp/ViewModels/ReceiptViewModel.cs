@@ -35,6 +35,11 @@ namespace ShoppingApp.ViewModels
 
         public void Exit()
         {
+            string filename = "receipt-";
+            filename += DateTime.Today.ToString("d");
+            filename += ".txt";
+            filename = filename.Replace("/", "-");
+            File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), filename), ReceiptString);
             Application.Current.Quit();
         }
     }
