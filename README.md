@@ -1,7 +1,7 @@
 # The Happy MiniMarket
 ### a mobile shopping application
 
-made for ".Net Development with C#" class, Spring 2021, C. Mills
+made for ".NET Development with C#" class, Spring 2021, C. Mills
 
 using Xamarin.Forms and an ASP.NET Core Web Api
 
