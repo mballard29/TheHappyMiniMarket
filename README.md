@@ -3,7 +3,7 @@
 
 made for ".NET Development with C#" class, Spring 2021, C. Mills
 
-using Xamarin.Forms and an ASP.NET Core Web Api
+using Xamarin.Forms and an ASP.NET Core Web API
 
 
 ![homepage](homepage.png) ![inventory](inventory.png)
